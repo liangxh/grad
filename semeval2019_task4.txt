@@ -1,0 +1,52 @@
+Dear participant(s),
+
+The virtual machine for your participation in "SemEval 2019 Task 4: 
+Hyperpartisan News Detection" is now ready.
+
+
+
+You can log in using:
+
+   sshpass -p dq1ipKGE ssh dan-vasser@betaweb113.medien.uni-weimar.de -p 
+44402 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+
+If you do not have sshpass install, you can read your credentials as 
+follows:
+
+   - Your password is between "-p" and "ssh"
+   - Your login is between "ssh" and "@"
+   - Your host is between "@" and "-p"
+   - Your port on the host is between "-p" and "-o"
+
+You can find the training set at 
+/media/training-datasets/hyperpartisan-news-detection/
+
+
+
+The same login and password are used on https://www.tira.io/tasks/ , 
+where you can run the software on the validation set.
+
+You can find our task here:
+
+   https://www.tira.io/task/hyperpartisan-news-detection/
+
+A user guide for TIRA can be found here:
+
+   https://www.tira.io/static/tira-vm-user-guide.pdf
+
+
+Do not hesitate to contact us in case of problems.
+
+Regards,
+Johannes
+
+
+
+-- 
+Johannes Kiesel
+
+Bauhaus-Universität Weimar
+Bauhausstr. 11, Room 109
+99423 Weimar, Germany
+
+Phone: +49 (0)3643 - 58 3720
