@@ -179,7 +179,7 @@ To alleviate the problem of overfitting, the following strategies are applied.
 
 \item Gaussian noise is added after the embedding layer, by which the model is more robust when dealing with tokens of similar meaning, as they are supposed to be projected to adjacent embedding vectors.
 
-\item Dropout layer is added before the stacked dense layers (Fig~\ref{fig:classifier}).
+\item Dropout \cite{Srivastava2014Dropout} layer is added before the stacked dense layers (Fig~\ref{fig:classifier}).
 
 \item L2 regularization is applied to the weights of the stacked dense layers.
 
