@@ -60,7 +60,7 @@
 \maketitle
 \begin{abstract}
 
-In this paper, we describe our hierarchical ensemble system designed for the SemEval-2019 task3, {\em EmoContext}. In our framework, we trained three set of classifiers for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Through three steps of voting, the predicted labels of these three sets of classifiers are combined to make the final prediction. Experiment results show that the ensemble approach manages to obtain better predictive performance in comparison with the base classifiers and our system has achieved the top 10 performance in the final evaluation of {\em EmoContext}.
+In this paper, we describe our hierarchical ensemble system designed for the SemEval-2019 task3, {\em EmoContext}. In our system, we trained three sets of classifiers for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Through three steps of voting, the predicted labels of these three sets of classifiers are combined to make the final prediction. Experiment results show that the ensemble approach manages to obtain better predictive performance in comparison with the base classifiers and our system has achieved the top 10 performance in the final evaluation of {\em EmoContext}.
 
 \end{abstract}
 
@@ -80,11 +80,11 @@ degreee & what degree \& where? & sryyy i really got to goo & others \\
 
 \section{Introduction}
 
-Sentiment analysis is a task to identify the emotion conveyed by written language. With the popularization of the Internet and instant message applications, text has become one of the most familiar media that people use to express their ideas and communicate with each other. Automatic emotion classification can help people and robots better understand the messages or comments written by other people and make proper responses, which makes this study field increasingly important.
+Sentiment analysis is a task to identify the emotion conveyed by written language. With the popularization of the Internet and instant message applications, text has become one of the most familiar media by which people express their ideas and communicate with each other. Automatic emotion classification can help people and robots better understand the messages or comments written by other people and make proper responses, which makes this study field increasingly important.
 
-Approaches to sentiment analysis can be classified into three categories: rule-based approaches, non-neural machine learning approaches and deep learning approaches. Significantly, neural networks have achieved state-of-art performance in many recent studies. \citet{Gupta2017A} used a LSTM-based model to identify the emotion in 3-turn conversations in Twitter but the turn information is not manipulated. For emotion detection on TV show transcripts, a sequence-based convolutional neural network which can make use of information in the previous lines was designed by \citet{Zahiri2017Emotion}. \citet{Hazarika2018} proposed a conversational memory network based on both CNN \cite{Lecun1998Convolutional} and gated recurrent unit \cite{DChungGCB14} to recognize emotion in dyadic dialogue videos, featuring its ability to manipulate the information of different speakers. Designing a proper structure of neural network to capture the information in different types of text data still remains a valuable topic.
+Approaches to sentiment analysis can be classified into three categories: rule-based approaches, non-neural machine learning approaches, and deep learning approaches. Significantly, neural networks have achieved state-of-art performance in many recent studies. \citet{Gupta2017A} used a LSTM-based model to identify the emotion in 3-turn conversations on Twitter but the manipulation of the turn information was not mentioned. For emotion detection on TV show transcripts, a sequence-based convolutional neural network which can make use of the information in the previous lines was designed by \citet{Zahiri2017Emotion}. \citet{Hazarika2018} proposed a conversational memory network based on both CNN \cite{Lecun1998Convolutional} and gated recurrent unit \cite{DChungGCB14} to recognize emotion in dyadic dialogue videos, featuring its ability to manipulate the information of different speakers. Designing a neural network of the proper architecture to capture the information conveyed by different types of text data still remains a valuable topic.
 
-In this paper, we describe our approach to SemEval-2019 task3, {\em EmoContext}, which aims to encourage more research of contextual emotion detection in textual conversation. Datasets of 3-turn conversations are provided and the participating systems are required to predict the contextual emotion of the last turn in the conversation: {\em Happy}, {\em Sad}, {\em Angry} or {\em Others}. The system performance is evaluated by the micro-averaged F1-score for {\em Happy}, {\em Sad} and {\em Angry} (hereinafter referred as {\em HSA}) on the given Test set. Our system is composed of three sets of CNN-based classifiers trained for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Through three steps of voting, the predicted labels of the base classifiers are combined to make the final prediction. Our system has achieved F1-score of 0.7616 in the final evaluation on Test set, which is the top 10 performance out of 165 participating systems.
+In this paper, we describe our approach to SemEval-2019 task3, {\em EmoContext} \cite{SemEval2019Task3}, which aims to encourage more research of contextual emotion detection in textual conversation. Datasets of 3-turn conversations are provided and the participating systems are required to predict the contextual emotion of the last turn in the conversation: {\em Happy}, {\em Sad}, {\em Angry} or {\em Others}. The system performance is evaluated by the micro-averaged F1-score for {\em Happy}, {\em Sad} and {\em Angry} (hereinafter referred to as {\em HSA}) on the given Test set. Our system is composed of three sets of CNN-based classifiers trained for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Through three steps of voting, the predicted labels of the base classifiers are combined to make the final prediction. Our system has achieved F1-score of 0.7616 in the final evaluation on the Test set, which is the top 10 performance out of 165 participating systems.
 
 This paper is organized as follows. In Section~\ref{sec:data}, we describe the datasets provided by the task organizers. In Section~\ref{sec:system_desc}, our system and the strategies of training base classifiers are detailed. In Section~\ref{sec:experiments}, we present and discuss the evaluation results of our system and the base classifiers. Conclusion is given in Section~\ref{sec:conclusion}.
 
@@ -106,31 +106,31 @@ Test & 4677 & 284 & 250 & 298 \\
 \section{Data}
 \label{sec:data}
 
-Task organizers have released three datasets. Each sample in these datasets contains a 3-turn conversation(Table~\ref{tab:sample}), in which Turn 1 was written by User 1, Turn 2 is User 2's reply to Turn 1 and Turn 3 is User 1's reply to Turn 2. The emotion label of Turn 3 is manually annotated for each conversation, which is one of the four emotions: {\em Happy}, {\em Sad}, {\em Angry} and {\em Others}. Class distributions of these three datasets are shown in Table~\ref{tab:dataset}. As the Train set and Dev set are both allowed to be used for model training at the phase of final evaluation, these two datasets are combined (hereinafter referred as the training set) to develop our system.
+Task organizers have released three datasets. Each sample in these datasets contains a 3-turn conversation(Table~\ref{tab:sample}), in which Turn 1 was written by User 1, Turn 2 is User 2's reply to Turn 1 and Turn 3 is User 1's reply to Turn 2. The emotion label of Turn 3 is manually annotated for each conversation, which is one of the four emotions: {\em Happy}, {\em Sad}, {\em Angry} and {\em Others}. Class distributions of these three datasets are shown in Table~\ref{tab:dataset}. As the Train set and Dev set are both allowed to be used for model training at the phase of final evaluation, these two datasets are combined (hereinafter referred to as the training set) to develop our system.
 
 \section{System Description}
 \label{sec:system_desc}
 
 \subsection{Preprocessing}
 
-Through our observation of the 3-turn conversations in the datasets, we realize the writing style resembles that of the tweets and comments in Twitter, featuring emoticons, informal usage of language, spelling errors and so on. Hence, we utilized the tweet processor, {\em ekphrasis}\footnote{https://github.com/cbaziotis/ekphrasis} \cite{Baziotis2017SE1704}. The preprocessing steps include (1) Twitter-specific tokenization, (2) spell correction, (3) word normalization for numbers and dates, (4) annotation for all-capital words, elongated words and repeated punctuations, (5) conversion of emoticons to emotion labels.
+Through our observation of the 3-turn conversations in the datasets, we realize the writing style resembles that of the tweets and comments in Twitter, featuring emoticons, informal usage of language, spelling errors and so on. Hence, we utilize the tweet processor, {\em ekphrasis}\footnote{https://github.com/cbaziotis/ekphrasis} \cite{Baziotis2017SE1704}. The preprocessing steps include (1) Twitter-specific tokenization, (2) spell correction, (3) word normalization for numbers and dates, (4) annotation for all-capital words, elongated words and repeated punctuations, (5) conversion of emoticons to emotion labels.
 
 \subsection{Word Embeddings}
 \label{ssec:word_emb}
 
-Word embedding is to capture semantic, syntactic and sentiment information of a word or token and represent it by a vector. We use the pretrained embedding model provided by \citet{Baziotis2018SE1803} \footnote{https://github.com/cbaziotis/ntua-slp-semeval2018} (hereinafter called NtuaW2V) in our system, which contains 300-dimensional vectors trained on Twitter messages that are also preprocessed by {\em ekphrasis}. In addition, we tried another pretrained model provided by \citet{Mikolov2013Distributed} \footnote{https://code.google.com/archive/p/word2vec/} (hereinafter called GoogleW2V), which containes 300-dimensional vectors trained on Google News dataset, in order to get an insight into the effect of different embedding models.
+Word embedding is to capture semantic, syntactic and sentiment information of a word or token and represent it by a vector. We use the pretrained embedding model provided by \citet{Baziotis2018SE1803} \footnote{https://github.com/cbaziotis/ntua-slp-semeval2018} (hereinafter called NtuaW2V) in our system, which contains 300-dimensional vectors trained on Twitter messages that are also preprocessed by {\em ekphrasis}. In addition, we tried another pretrained model provided by \citet{Mikolov2013Distributed} \footnote{https://code.google.com/archive/p/word2vec/} (hereinafter called GoogleW2V), which contains 300-dimensional vectors trained on Google News dataset, in order to get an insight into the effect of different embedding models.
 
 \subsection{Classifier}
 
-Our system is composed of neural network classifiers with the same structure (Fig~\ref{fig:classifier}). The input to the classifier is a 3-turn conversation, treated as 3 sequences of tokens after the preprocessing step. An embedding layer is used to project the input to 3 sequences of vectors. This layer is initialized by the pretrained word embeddings mentioned in Section~\ref{ssec:word_emb}. For tokens that are not covered in the embedding model but occur in no less than two training samples, we randomly initialize the embedding vectors.
+Our system is composed of neural network classifiers sharing the same architecture (Fig~\ref{fig:classifier}). The input to the classifier is a 3-turn conversation, treated as 3 sequences of tokens after the preprocessing step. An embedding layer is used to project the input to 3 sequences of vectors. This layer is initialized by the pretrained word embeddings mentioned in Section~\ref{ssec:word_emb}. For tokens that are not covered in the embedding model but occur in no less than two training samples, we randomly initialize their embedding vectors.
 
-Each sequence of vectors is then fed into a CNN layer followed by max pooling respectively to get a vector as the representation of the corresponding turn. Three vectors are concatenated as the feature vector of the 3-turn conversation and it is then fed into a dense layer with rectified linear unit (ReLU) and another dense layer with softmax to get the probability distribution over all predicted classes.
+Each sequence of vectors is then fed into a CNN layer followed by max pooling respectively to get a vector as the representation of the corresponding turn. Three vectors are concatenated as the feature vector of the 3-turn conversation and it is then fed into a dense layer with a rectified linear unit (ReLU) and another dense layer with softmax to get the probability distribution over all predicted classes.
 
 \begin{table}\small
 \begin{center}
 \begin{tabular}{c|c}
 \hline
-\bf Name & \bf Value \\ 
+\bf Parameter & \bf Value \\ 
 \hline
 \# of classifiers in each set  & 5 \\
 $thr_{II}$ & 2  \\
@@ -154,28 +154,28 @@ minibatch size & 100 \\
 \subsection{Hierarchical Ensemble}
 \label{ssec:ensemble}
 
-In order the improve the predictive performance, we design three steps of voting to combine the predicted labels of base classifiers. Three sets of classifiers are trained. Set A is a set of four-emotion classifiers trained by the given dataset and the original labels. Set B is a set of triple classifiers trained only by the samples of {\em HSA}. Classifiers in Set C are binary classifiers, which are also trained by the given dataset but the labels for samples of {\em HSA} are changed to {\em Not Others}. 
+In order the improve the predictive performance, we design three steps of voting to combine the predicted labels of base classifiers. Three sets of classifiers are trained. Set A is a set of four-emotion classifiers trained on the given dataset and the original labels. Set B is a set of triple classifiers trained only on the samples of {\em HSA}. Classifiers in Set C are binary classifiers, which are also trained on the given dataset but the labels for samples of {\em HSA} are changed to {\em Not Others}. 
 
-First step is the majority voting in Set A to get the base predicted labels (hereinafter referred as Prediction I). At the second step, majority voting is applied to Set B and we change the predicted label to the new major vote if the sample is not predicted as {\em Others} in Prediction I and the voting count of the majorly voted class exceeds a given threshold $thr_{II}$, by which the prediction for {\em HSA} is refined. This set of predicted labels are hereinafter referred as Prediction II. At the third step, classifiers in Set C vote for each sample whether it belongs to {\em Others} or not. Then we change the predicted label to {\em Others} if more than $thr_{III}$ classifiers in Set C vote for {\em Others}. This set of predicted labels are used as the final prediction (hereinafter referred as Prediction III). We train several classifiers for voting at each step instead of using single classifier as the revision will be statistically more reliable.
+The first step is the majority voting of Set A to get the base predicted labels (hereinafter referred to as Prediction I). At the second step, majority voting is applied to Set B and we change the predicted label to the new major vote if the sample is not predicted as {\em Others} in Prediction I and the voting count of the majorly voted class exceeds a given threshold $thr_{II}$, by which the prediction for {\em HSA} is refined. This set of predicted labels are hereinafter referred to as Prediction II. At the third step, classifiers in Set C vote for each sample whether it belongs to {\em Others} or not. Then we change the predicted label to {\em Others} if more than $thr_{III}$ classifiers in Set C vote for {\em Others}. This set of predicted labels are used as the final prediction (hereinafter referred to as Prediction III). We train a set of classifiers for voting at each step instead of using single classifier in order to make the revision of the predicted labels statistically more reliable.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.45\textwidth]{framework_vertical.pdf}
-\caption{\label{fig:classifier} The architecture of CNN-based classifiers in our system.}
+\includegraphics[width=0.46\textwidth]{framework_vertical.pdf}
+\caption{\label{fig:classifier} The architecture of the CNN-based classifiers in our system.}
 \end{center}
 \end{figure}
 
 \subsection{Regularization}
 
-In order to alleviate the problem of overfitting, following strategies are applied.
+To alleviate the problem of overfitting, the following strategies are applied.
 
 \begin{itemize}
 
-\item Early stopping is used. For each classifier, we randomly select 90\% of the training set for training and the 10\% left for validation so that the information captured by each base classifier will diverse. Although the evaluation metric is micro-averaged F1 score for {\em Happy}, {\em Sad} and {\em Angry}, we choose the set of neural network weights that achieves the best micro-averaged precision on the validation set. As we notice that precision is significantly sensitive to the class distribution and the task organizers have emphasized the difference between the class distributions of the provides datasets in advance, we want the precision of the base classifiers to be as high as possible.
+\item Early stopping is used. For each classifier, we randomly select 90\% of the training set for training and the 10\% left for validation so that the information captured by each base classifier will diverse. Although the evaluation metric is micro-averaged F1 score for {\em HSA}, we choose the set of neural network weights that achieves the best micro-averaged precision on the validation set when we train the classifiers in Set A. As we notice that the precision is significantly sensitive to the class distribution and the task organizers have emphasized the difference between the class distributions of the provided datasets in advance, we need the precision of the base classifiers to be as high as possible.
 
-\item New samples of {\em Others} are automatically created. For each sample of the classs {\em Others} in the selected 90\% training set, we create a new {\em Others} sample by randomly remove one token in one of the turns to simulate the situation when the user misspell a word and that misspelled token is not known to our embedding models. As we observe that most of the {\em Others} samples in the training set still belong to {\em Others} even if one of the tokens is missing or misspelled. However, we do not generate samples for {\em Happy}, {\em Sad} and {\em Angry} automatically in case the discriminative token is removed and a missleading sample will be made.
+\item New samples of {\em Others} are automatically created. For each sample of the class {\em Others} in the selected 90\% training set, we create a new {\em Others} sample by randomly remove one token in one of the turns to simulate the situation when the user misspells a word and that misspelled token is not known to our embedding models. This is inspired by our observation that most of the {\em Others} samples in the training set still belong to {\em Others} even if one of the tokens is missing or misspelled. However, we do not generate samples for {\em HSA} automatically in case a discriminative token is removed and a missleading sample will be made.
 
-\item Embedding layer is not fine-tuned as the relative positions of the embedding vectors of the tokens in the training set will be changed but those of the tokens in Test set but not in the training set are not adjusted, which may lead to wrong representation of the meaning of these tokens in the new embedding space.
+\item Embedding layer is not fine-tuned as the embedding space of the tokens in the training set will be changed but the embedding vectors of the tokens in the Test set but not in the training set are not adjusted, which will lead to wrong representations of these tokens in the new embedding space.
 
 \item Gaussian noise is added after the embedding layer, by which the model is more robust when dealing with tokens of similar meaning, as they are supposed to be projected to adjacent embedding vectors.
 
@@ -203,7 +203,7 @@ Emb \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{tab:base_clfr} Performance of the base classifier and its variants on Test set.}
+\caption{\label{tab:base_clfr} Performance of the base classifier and its variants on the Test set.}
 \end{table}
 
 \section{Experiments and Discussion}
@@ -211,21 +211,21 @@ Emb \\
 
 \subsection{Implementation Details}
 
-Tensorflow \cite{tensorflow} is used to develop our models. For network optimization, we choose Adam algorithm \cite{Kingma2014Adam}. Configuration of our system and the hyper-parameters of the base classifiers are shown in Table~\ref{tab:hyper_param}. 
+Tensorflow \cite{tensorflow} is used to develop our models. For network optimization, we choose Adam algorithm \cite{Kingma2014Adam}. The configuration of our system and the hyper-parameters of the base classifiers are shown in Table~\ref{tab:hyper_param}. 
 
 \subsection{Results and Discussion}
 
-Table~\ref{tab:base_clfr} shows the performance of our base classifier and its variants on the Test set. Note that {\bf Base} refers to the model trained as mentioned in Section~\ref{sec:system_desc} and {\bf Prec}, {\bf Rec} and {\bf F1} refers to the micro-averaged ones over {\em HSA}.
+Table~\ref{tab:base_clfr} shows the performance of our base classifier and its variants on the Test set. Note that {\bf Base} refers to the model trained as mentioned in Section~\ref{sec:system_desc} and {\bf Prec}, {\bf Rec} and {\bf F1} refers to the micro-averaged ones for {\em HSA}.
 
-According to Table~\ref{tab:base_clfr}, adding automatically generated {\em Others} samples can improve the accuracy, precision and F1-score as more {\em Others} samples are correctly predicted but less {\em HAS} samples are recalled as the cost.
+According to Table~\ref{tab:base_clfr}, adding automatically generated {\em Others} samples can improve the accuracy, precision and F1-score as more {\em Others} samples are correctly predicted but less {\em HSA} samples are recalled as the cost.
 
 We also observe the performance difference when different metric is used as the indicator for choosing the network weights in early stopping, which is rarely discussed but the results show that the effect is significant. It is because of the remarkable difference between the class distributions of the training set and the Test set, which is emphasized by the task organizers.
 
 On the other hand, NtuaW2V and GoogleW2V, the embedding models used to initialize the embedding layer, are compared. Results show that using NtuaW2V can achieve better F1-score while using GoogleW2V achieve the best precision but also the worst recall among the variants, which shows the importance of choosing suitable pretrained embedding models. The data on which the embedding model is trained and how the data are preprocessed should be the crucial keys to it.
 
-% We have analyzed the base classifier's confusion matrix on Test set (Table~\ref{tab:conf_mat}) and two phenomenons are observed. First, the crucial problem that affect the performance of our classifiers is that many {\em Others} samples are falsely predicted, which severely lowers the precision as the proportion of {\em Others} are remarkably high in Test set. The second phenomenon is that our classifiers are relatively effective to classify samples among {\em Happy}, {\em Sad} and {\em Angry}.
+% We have analyzed the base classifier's confusion matrix on the Test set (Table~\ref{tab:conf_mat}) and two phenomenons are observed. First, the crucial problem that affects the performance of our classifiers is that many {\em Others} samples are falsely predicted, which severely lowers the precision as the proportion of {\em Others} are remarkably high in the Test set. The second phenomenon is that our classifiers are relatively effective to classify samples among {\em Happy}, {\em Sad} and {\em Angry}.
 
-Table~\ref{tab:boosting_mat} illustrates the performance of our system after each step of voting. Results show that the first two steps bring slight improvement on all four metrics and the final step improves F1-score by raising the precision at the cost of recall, which implies that, in comparison with Set A, classifiers in Set B are more effective to distinguish {\em HSA} samples and those in Set C are more precise to classify whether a sample belongs to {\em Others}. Although these classifier sets are all trained on the given dataset, Set B and Set C manage to work as a patch to Set A as they only focus on the simplified classification problems.
+Table~\ref{tab:boosting_mat} illustrates the performance of our system after each step of voting. Results show that the first two steps bring slight improvement on all four metrics and the final step improves F1-score by raising the precision at the cost of recall. The improvement also implies that, in comparison with Set A, classifiers in Set B are more effective to distinguish {\em HSA} samples and those in Set C are more precise to classify whether a sample belongs to {\em Others}. Although these classifier sets are all trained on the given dataset, Set B and Set C manage to work as a patch to Set A as they only focus on the simplified classification problems.
 
 % \begin{table}[]\small
 % \centering
@@ -238,7 +238,7 @@ Table~\ref{tab:boosting_mat} illustrates the performance of our system after eac
 %                            & \bf Sad        & 29     & 1     & 207 & 13    \\
 %                            & \bf Angry      & 40     & 1     & 2   & 255   \\ \hline
 % \end{tabular}
-% \caption{\label{tab:conf_mat} Sample of confusion matrix on Test set.}
+% \caption{\label{tab:conf_mat} Sample of confusion matrix on the Test set.}
 % \end{table}
 
 \begin{table}\small
@@ -254,13 +254,13 @@ III & \bf 0.9305 & \bf 0.7553 & 0.7680 & \bf 0.7616 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{tab:boosting_mat} Performance of our system after each step of voting on Test set.}
+\caption{\label{tab:boosting_mat} Performance of our system after each step of voting on the Test set.}
 \end{table}
 
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-In this paper, we present our system used for SemEval2019 Task3, {\em EmoContext}. This system is composed of three sets of CNN-based neural network models trained for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Three steps of voting are used to combine the predicted labels of the base classifiers and make the final prediction. Experiment results show that our training strategies are effective and the ensemble approach manages to improve the performance in comparison with the base classifiers. We highlight the importance of choosing pretrained embedding models and picking the right metric as indicator for choosing network weights in early stopping. In order to achieve better result based on our system, improving the performance of base classifier is crucial. The structure of neural networks and the features used as the input should be the fields that worth further exploration.
+In this paper, we present our system used for SemEval2019 Task3, {\em EmoContext}. This system is composed of three sets of CNN-based neural network models trained for four-emotion classification, {\em Happy-Sad-Angry} classification and {\em Others}-or-not classification respectively. Three steps of voting are used to combine the predicted labels of the base classifiers and make the final prediction. Experiment results show that our training strategies are effective and the ensemble approach manages to improve the performance in comparison with the base classifiers. We highlight the importance of choosing pretrained embedding models and picking the right metric as the indicator for choosing network weights in early stopping. In order to achieve a better result based on our system, improving the performance of the base classifier is crucial. The architecture of neural networks and the features used as the input should be the fields that worth further exploration.
 
 \bibliography{semeval2018}
 \bibliographystyle{acl_natbib}
